@@ -70,7 +70,7 @@ public class BlockingPoolTest
     EMPTY_POOL.takeBatch(1, 0);
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testTake()
   {
     final ReferenceCountingResourceHolder<Integer> holder = POOL.take(100);
@@ -80,7 +80,7 @@ public class BlockingPoolTest
     assertEquals(10, POOL.getPoolSize());
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testTakeTimeout()
   {
     final ReferenceCountingResourceHolder<List<Integer>> batchHolder = POOL.takeBatch(10, 100L);
@@ -89,7 +89,7 @@ public class BlockingPoolTest
     batchHolder.close();
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testTakeBatch()
   {
     final ReferenceCountingResourceHolder<List<Integer>> holder = POOL.takeBatch(6, 100L);
@@ -100,7 +100,7 @@ public class BlockingPoolTest
     assertEquals(10, POOL.getPoolSize());
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testWaitAndTakeBatch() throws InterruptedException, ExecutionException
   {
     ReferenceCountingResourceHolder<List<Integer>> batchHolder = POOL.takeBatch(10, 10);
@@ -137,7 +137,7 @@ public class BlockingPoolTest
     assertNull(holder);
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testConcurrentTake() throws ExecutionException, InterruptedException
   {
     final int limit1 = POOL.maxSize() / 2;
@@ -151,7 +151,7 @@ public class BlockingPoolTest
           {
             List<ReferenceCountingResourceHolder<Integer>> result = Lists.newArrayList();
             for (int i = 0; i < limit1; i++) {
-              result.add(POOL.take(10));
+              result.add(POOL.take(100));
             }
             return result;
           }
@@ -165,7 +165,7 @@ public class BlockingPoolTest
           {
             List<ReferenceCountingResourceHolder<Integer>> result = Lists.newArrayList();
             for (int i = 0; i < limit2; i++) {
-              result.add(POOL.take(10));
+              result.add(POOL.take(100));
             }
             return result;
           }
@@ -223,7 +223,7 @@ public class BlockingPoolTest
     assertEquals(POOL.maxSize(), POOL.getPoolSize());
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testConcurrentTakeBatch() throws ExecutionException, InterruptedException
   {
     final int batch1 = POOL.maxSize() / 2;
@@ -233,7 +233,7 @@ public class BlockingPoolTest
           @Override
           public ReferenceCountingResourceHolder<List<Integer>> call() throws Exception
           {
-            return POOL.takeBatch(batch1, 10);
+            return POOL.takeBatch(batch1, 100);
           }
         };
 
@@ -244,7 +244,7 @@ public class BlockingPoolTest
           @Override
           public ReferenceCountingResourceHolder<List<Integer>> call() throws Exception
           {
-            return POOL.takeBatch(batch2, 10);
+            return POOL.takeBatch(batch2, 100);
           }
         };
 
@@ -269,7 +269,7 @@ public class BlockingPoolTest
     assertEquals(POOL.maxSize(), POOL.getPoolSize());
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testConcurrentBatchClose() throws ExecutionException, InterruptedException
   {
     final int batch1 = POOL.maxSize() / 2;
@@ -329,7 +329,7 @@ public class BlockingPoolTest
     assertEquals(POOL.maxSize(), POOL.getPoolSize());
   }
 
-  @Test(timeout = 1000)
+  @Test(timeout = 10000)
   public void testConcurrentTakeBatchClose() throws ExecutionException, InterruptedException
   {
     final ReferenceCountingResourceHolder<List<Integer>> r1 = POOL.takeBatch(1, 10);
